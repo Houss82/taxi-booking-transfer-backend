@@ -5,33 +5,48 @@ const Booking = require("../models/Booking");
 // Créer une nouvelle réservation
 router.post("/", async (req, res) => {
   try {
-    console.log("Données reçues:", req.body); // Pour déboguer
-    const booking = new Booking({
+    // Validation du type de réservation
+    if (
+      !req.body.bookingType ||
+      !["book", "quote"].includes(req.body.bookingType.toLowerCase())
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Invalid or missing bookingType" });
+    }
+
+    const bookingData = {
       departure: req.body.departure,
       arrival: req.body.arrival,
-      date: req.body.date,
+      date: new Date(req.body.date),
       time: req.body.time,
-      passengers: req.body.passengers,
-      luggage: req.body.luggage,
+      passengers: Number(req.body.passengers),
+      luggage: Number(req.body.luggage),
       vehicleType: req.body.vehicleType,
-      price: req.body.price,
+      bookingType: req.body.bookingType.toLowerCase(),
+      price: Number(req.body.price) || 0,
       customerInfo: {
         firstName: req.body.customerInfo.firstName,
         lastName: req.body.customerInfo.lastName,
         email: req.body.customerInfo.email,
         phone: req.body.customerInfo.phone,
-        specialRequests: req.body.customerInfo.specialRequests,
+        specialRequests: req.body.customerInfo.specialRequests || "",
       },
       status: req.body.status || "pending",
-      createdAt: req.body.createdAt || new Date(),
-    });
+    };
 
+    console.log("Vérification des données avant sauvegarde :", bookingData);
+
+    const booking = new Booking(bookingData);
     const savedBooking = await booking.save();
-    console.log("Réservation sauvegardée:", savedBooking); // Pour déboguer
     res.status(201).json(savedBooking);
   } catch (error) {
-    console.error("Erreur lors de la sauvegarde:", error); // Pour déboguer
-    res.status(400).json({ message: error.message });
+    console.error("Erreur complète:", error);
+    res.status(400).json({
+      message: "Erreur lors de la création de la réservation",
+      error: error.message,
+      details: error.errors,
+    });
   }
 });
 

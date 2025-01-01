@@ -32,14 +32,18 @@ const bookingSchema = new mongoose.Schema({
     required: true,
     enum: ["Standard", "Business", "Business Van"],
   },
+  bookingType: {
+    type: String,
+    required: [true, "Le type de réservation est requis"],
+    enum: {
+      values: ["book", "quote"],
+      message: "Le type de réservation doit être 'book' ou 'quote'",
+    },
+    default: "book",
+  },
   price: {
     type: Number,
     required: true,
-  },
-  bookingType: {
-    type: String,
-    required: true,
-    enum: ["book", "quote"],
   },
   customerInfo: {
     firstName: {
@@ -69,6 +73,12 @@ const bookingSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+// Middleware pour le debug
+bookingSchema.pre("save", function (next) {
+  console.log("Pre-save booking data:", this.toObject());
+  next();
 });
 
 module.exports = mongoose.model("Booking", bookingSchema);
