@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
-const connectionString =
-  "mongodb+srv://mansourhoussem1982:0LshwJSY0rc7rFQ1@cluster0.5lywams.mongodb.net/taxi-nice-airport";
+const connectionString = process.env.MONGODB_URI;
 
 const connectDB = async () => {
   try {
