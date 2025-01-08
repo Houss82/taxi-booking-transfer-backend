@@ -11,6 +11,7 @@ const connectDB = require("./models/connection");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 const bookingRoutes = require("./routes/bookings");
+const articlesRoutes = require("./routes/articles");
 
 var app = express();
 
@@ -29,6 +30,7 @@ const corsOptions = {
   credentials: true, // Pour permettre l'envoi de cookies
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  exposedHeaders: ["Content-Range", "X-Content-Range"],
 };
 
 app.use(cors(corsOptions));
@@ -36,7 +38,7 @@ app.use(cors(corsOptions));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/bookings", bookingRoutes);
-
+app.use("/articles", articlesRoutes);
 // Gestion des erreurs
 app.use((err, req, res, next) => {
   console.error(err.stack);
