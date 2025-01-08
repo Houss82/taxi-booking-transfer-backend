@@ -14,9 +14,14 @@ cloudinary.config({
 // GET tous les articles
 router.get("/", async (req, res) => {
   try {
-    const articles = await Article.find().sort({ datePublication: -1 });
+    console.log("Requête GET reçue pour tous les articles"); // Debug
+    const articles = await Article.find({ estPublie: true }).sort({
+      datePublication: -1,
+    });
+    console.log("Articles trouvés:", articles.length); // Debug
     res.json(articles);
   } catch (error) {
+    console.error("Erreur lors de la récupération des articles:", error);
     res.status(500).json({ message: error.message });
   }
 });
