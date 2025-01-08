@@ -26,8 +26,13 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Configuration CORS avec options
 const corsOptions = {
-  origin: ["http://localhost:3001", "http://localhost:3000"], // Ajoutez ici les URLs de votre frontend
-  credentials: true, // Pour permettre l'envoi de cookies
+  origin: [
+    "http://localhost:3001",
+    "http://localhost:3000",
+    "https://www.taxi-niceairport.com",
+    "https://taxi-niceairport.com",
+  ],
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   exposedHeaders: ["Content-Range", "X-Content-Range"],
