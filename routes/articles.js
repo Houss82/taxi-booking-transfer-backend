@@ -139,4 +139,16 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.get("/articles/slug/:slug", async (req, res) => {
+  try {
+    const article = await Article.findOne({ slug: req.params.slug });
+    if (!article) {
+      return res.status(404).json({ message: "Article non trouvé" });
+    }
+    res.json(article);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router;
